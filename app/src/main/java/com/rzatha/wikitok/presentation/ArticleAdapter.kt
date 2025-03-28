@@ -2,18 +2,12 @@ package com.rzatha.wikitok.presentation
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.Transformation
-import com.bumptech.glide.load.resource.bitmap.DrawableTransformation
 import com.rzatha.wikitok.R
 import com.rzatha.wikitok.databinding.ArticlePreviewItemBinding
 import com.rzatha.wikitok.domain.ArticlePreviewItem
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
 
@@ -35,7 +29,6 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        Log.d("MainActivity", "onBindViewHolder")
 
         val article = articleList[position]
 
@@ -54,11 +47,9 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
 
                 tvTitle.text = title
                 tvArticleText.text = extractText
-                Log.d("MainActivity", "title text ${tvArticleText.text}")
 
                 if (position >= articleList.size - 2) {
                     onReachEndListener?.onReachEnd()
-                    Log.d("MainActivity", "$position >= ${articleList.size} - 2")
                 }
             }
         }
@@ -76,22 +67,7 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
     override fun getItemCount() = articleList.size
 
     class ArticleViewHolder(val binding: ArticlePreviewItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.nestedScrollView.setOnTouchListener { v, event ->
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        // Блокируем родительский RecyclerView при начале скролла
-                        v.parent.requestDisallowInterceptTouchEvent(true)
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        v.parent.requestDisallowInterceptTouchEvent(false)
-                    }
-                }
-                false
-            }
-        }
-        }
+        RecyclerView.ViewHolder(binding.root)
 
     interface OnReachEndListener {
         fun onReachEnd()
