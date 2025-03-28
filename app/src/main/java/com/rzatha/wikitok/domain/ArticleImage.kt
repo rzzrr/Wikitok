@@ -1,6 +1,6 @@
 package com.rzatha.wikitok.domain
 
-data class Image(
+data class ArticleImage(
     val name: String,
     val source: String
 )

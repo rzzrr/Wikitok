@@ -1,12 +1,12 @@
 package com.rzatha.wikitok.presentation
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSnapHelper
-import com.rzatha.wikitok.R
 import com.rzatha.wikitok.databinding.ActivityMainBinding
-import com.rzatha.wikitok.domain.ArticlePreviewItem
-import com.rzatha.wikitok.domain.Image
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,37 +16,40 @@ class MainActivity : AppCompatActivity() {
 
     private val articleAdapter = ArticleAdapter()
     private val snapHelper = LinearSnapHelper()
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         setupRecyclerView()
-        snapHelper.attachToRecyclerView(binding.rvArticles)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        observeViewModel()
 
-        val tempArtList = mutableListOf<ArticlePreviewItem>()
-        for (i in 0 until 100) {
-            tempArtList.add(ArticlePreviewItem(
-                i,
-                "Title $i",
-                "Long long text $i",
-                source= "",
-                image = Image(
-                    "",
-                    ""
-                )
-            ))
+    }
+
+    private fun observeViewModel() {
+        viewModel.articlePreviewItemList.observe(this){
+            Log.d(TAG, "observeViewModel")
+            articleAdapter.articleList = it
         }
-        articleAdapter.articleList = tempArtList
     }
 
     private fun setupRecyclerView() {
-
-
+        snapHelper.attachToRecyclerView(binding.rvArticles)
         with(binding.rvArticles){
             adapter = articleAdapter
         }
+        articleAdapter.onReachEndListener = object : ArticleAdapter.OnReachEndListener{
+            override fun onReachEnd() {
+                Log.d(TAG, "onReachEnd")
+                viewModel. loadRandomResponse()
+            }
+        }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 
 }

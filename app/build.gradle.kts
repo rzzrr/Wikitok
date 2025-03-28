@@ -62,5 +62,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.converter.gson)
+
+    implementation(libs.glide)
 
 }
