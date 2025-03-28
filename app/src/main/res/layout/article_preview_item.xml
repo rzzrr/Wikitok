@@ -47,7 +47,9 @@
             app:layout_constraintTop_toBottomOf="@+id/ivArticle"
             tools:text="Golden Gate Bridge" />
 
-        <ScrollView
+        <com.rzatha.wikitok.presentation.CustomNestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:paddingStart="16dp"
@@ -63,12 +65,12 @@
             <TextView
                 android:id="@+id/tvArticleText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textSize="18sp"
                 tools:text="@string/es"
 
                 />
-        </ScrollView>
+        </com.rzatha.wikitok.presentation.CustomNestedScrollView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
