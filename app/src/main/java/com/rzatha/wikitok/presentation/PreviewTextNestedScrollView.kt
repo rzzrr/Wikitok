@@ -5,9 +5,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.core.widget.NestedScrollView
 
-class CustomNestedScrollView : NestedScrollView {
-
-    private var isScrollable = true // По умолчанию прокрутка включена
+class PreviewTextNestedScrollView : NestedScrollView {
 
     constructor(context: Context) : super(context)
 

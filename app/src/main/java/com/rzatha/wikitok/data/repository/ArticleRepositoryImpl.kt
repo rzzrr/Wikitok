@@ -4,15 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
-import com.rzatha.wikitok.data.ArticlePreviewDto
 import com.rzatha.wikitok.data.Mapper
-import com.rzatha.wikitok.data.PreviewArticleImageTitle
 import com.rzatha.wikitok.data.network.WikiApiFactory
 import com.rzatha.wikitok.domain.ArticlePreviewItem
 import com.rzatha.wikitok.domain.Repository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class ArticleRepositoryImpl() : Repository {
 
@@ -27,7 +22,10 @@ class ArticleRepositoryImpl() : Repository {
         }
 
     override suspend fun getArticleById(id: Int): ArticlePreviewItem {
-        TODO("Not yet implemented")
+        val res = wikiApiService.getArticleById(pageIds = id)
+            .queryPages
+            .pageMap[id] ?: throw RuntimeException("Article item is null")
+        return mapper.mapArticlePreviewDtoToArticlePreview(res)
     }
 
     override suspend fun loadRandomResponse() {
@@ -68,7 +66,6 @@ class ArticleRepositoryImpl() : Repository {
     private suspend fun bindImageUrl(articles: List<ArticlePreviewItem>) {
 
         articles.forEach { articleItem ->
-
             articleItem.imageTitle?.let {
                 try {
                     val imageTitle = it.first {

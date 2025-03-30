@@ -1,0 +1,55 @@
+package com.rzatha.wikitok.presentation
+
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.text.method.LinkMovementMethod
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
+import androidx.lifecycle.ViewModelProvider
+import com.rzatha.wikitok.R
+import com.rzatha.wikitok.databinding.ActivityArticleDetailBinding
+
+class ArticleDetailActivity : AppCompatActivity() {
+
+    private val binding by lazy {
+        ActivityArticleDetailBinding.inflate(layoutInflater)
+    }
+
+    private lateinit var viewModel: ArticleDetailViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        intent.extras?.getInt(EXTRA_ARTICLE_ID)?.let {
+
+            viewModel = ViewModelProvider(
+                this,
+                ArticleDetailViewModelFactory(it)
+            )[ArticleDetailViewModel::class.java]
+
+
+        } ?: throw RuntimeException("The required argument ArticleId was not passed ")
+
+        viewModel.ldArticle.observe(this){
+            with(binding.tvContent) {
+                text = it.extractText
+            }
+        }
+
+    }
+
+    companion object {
+
+        private const val EXTRA_ARTICLE_ID = "article_id"
+
+        fun newIntent(context: Context, articleId: Int) =
+            Intent(context, ArticleDetailActivity::class.java).apply {
+                putExtra(EXTRA_ARTICLE_ID, articleId)
+            }
+
+    }
+
+
+}

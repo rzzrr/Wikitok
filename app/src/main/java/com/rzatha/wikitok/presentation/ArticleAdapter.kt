@@ -12,6 +12,7 @@ import com.rzatha.wikitok.domain.ArticlePreviewItem
 class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
 
     var onReachEndListener: OnReachEndListener? = null
+    var onItemClickListener: OnItemClickListener? = null
 
     var articleList: List<ArticlePreviewItem> = listOf()
         set(value) {
@@ -36,11 +37,12 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
             with(article) {
 
                 if (imageUrl != null) {
-                    Log.d("MainActivity", "Glide: ${article.imageUrl}")
+                    Log.d("MainActivity", "Image url: ${article.imageUrl}\nArticle title: ${article.title}\n" +
+                            "Article id: ${article.id}")
                     Glide.with(holder.itemView)
                         .load(article.imageUrl)
                         .placeholder(R.drawable.ic_heart_filled)
-                        .into(holder.binding.ivArticle)
+                        .into(ivArticle)
                 } else {
                     ivArticle.setImageResource(R.drawable.ggb)
                 }
@@ -51,13 +53,17 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
                 if (position >= articleList.size - 2) {
                     onReachEndListener?.onReachEnd()
                 }
+
+                root.setOnClickListener {
+                    onItemClickListener?.onItemClick(id)
+                }
             }
         }
     }
 
     override fun onViewRecycled(holder: ArticleViewHolder) {
         super.onViewRecycled(holder)
-        with(holder.binding){
+        with(holder.binding) {
             tvTitle.text = ""
             tvArticleText.text = ""
             ivArticle.setImageDrawable(null)
@@ -71,5 +77,9 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
 
     interface OnReachEndListener {
         fun onReachEnd()
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(articleId: Int)
     }
 }

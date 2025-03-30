@@ -66,4 +66,7 @@ dependencies {
 
     implementation(libs.glide)
 
+
+    implementation(libs.androidx.core.ktx.v160) // Для HtmlCompat
+
 }

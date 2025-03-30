@@ -46,6 +46,13 @@ class MainActivity : AppCompatActivity() {
                 viewModel. loadRandomResponse()
             }
         }
+        articleAdapter.onItemClickListener = object : ArticleAdapter.OnItemClickListener{
+
+            override fun onItemClick(articleId: Int) {
+                startActivity(ArticleDetailActivity.newIntent(this@MainActivity, articleId))
+            }
+
+        }
     }
 
     companion object {

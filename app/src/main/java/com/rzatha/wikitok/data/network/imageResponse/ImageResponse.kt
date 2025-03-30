@@ -1,4 +1,4 @@
-package com.rzatha.wikitok.data.network
+package com.rzatha.wikitok.data.network.imageResponse
 
 import com.google.gson.annotations.SerializedName
 

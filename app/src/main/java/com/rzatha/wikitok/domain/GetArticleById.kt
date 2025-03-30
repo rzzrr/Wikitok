@@ -4,8 +4,8 @@ class GetArticleById(
     private val repository: Repository
 ) {
 
-    suspend operator fun invoke(id: Int){
-        repository.getArticleById(id)
+    suspend operator fun invoke(id: Int): ArticlePreviewItem{
+        return repository.getArticleById(id)
     }
 
 }
