@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rzatha.wikitok.data.repository.ArticleRepositoryImpl
-import com.rzatha.wikitok.domain.ArticlePreviewItem
+import com.rzatha.wikitok.domain.Article
 import com.rzatha.wikitok.domain.GetArticleById
 import kotlinx.coroutines.launch
 
@@ -16,8 +16,8 @@ class ArticleDetailViewModel(
     private val repository = ArticleRepositoryImpl()
     private val getArticleById = GetArticleById(repository)
 
-    private val _ldArticle = MutableLiveData<ArticlePreviewItem>()
-    val ldArticle : LiveData<ArticlePreviewItem>
+    private val _ldArticle = MutableLiveData<Article>()
+    val ldArticle : LiveData<Article>
         get() = _ldArticle
 
     init {

@@ -3,6 +3,7 @@ package com.rzatha.wikitok.presentation
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -26,12 +27,20 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         observeViewModel()
 
+
     }
 
     private fun observeViewModel() {
         viewModel.articlePreviewItemList.observe(this){
             Log.d(TAG, "observeViewModel")
             articleAdapter.articleList = it
+        }
+        viewModel.isLoading.observe(this){loading ->
+            if(loading) {
+                Toast.makeText(this,"New data loading", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this,"New data loaded", Toast.LENGTH_LONG).show()
+            }
         }
     }
 

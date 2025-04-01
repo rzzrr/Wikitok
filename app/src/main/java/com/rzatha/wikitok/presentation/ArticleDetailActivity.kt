@@ -4,9 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.rzatha.wikitok.R
 import com.rzatha.wikitok.databinding.ActivityArticleDetailBinding
 
@@ -33,10 +36,16 @@ class ArticleDetailActivity : AppCompatActivity() {
         } ?: throw RuntimeException("The required argument ArticleId was not passed ")
 
         viewModel.ldArticle.observe(this){
-            with(binding.tvContent) {
-                text = it.extractText
-            }
+            binding.webView.loadDataWithBaseURL(
+                "https://ru.wikipedia.org/",
+                it.extractText ?: "",
+                "text/html",
+                "UTF-8",
+                null
+            )
         }
+
+        binding.webView.webViewClient = WikiWebViewClient(this)
 
     }
 

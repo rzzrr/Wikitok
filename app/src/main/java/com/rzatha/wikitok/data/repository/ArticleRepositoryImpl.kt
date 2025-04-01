@@ -6,26 +6,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.rzatha.wikitok.data.Mapper
 import com.rzatha.wikitok.data.network.WikiApiFactory
-import com.rzatha.wikitok.domain.ArticlePreviewItem
+import com.rzatha.wikitok.domain.Article
 import com.rzatha.wikitok.domain.Repository
 
 class ArticleRepositoryImpl() : Repository {
 
     private val wikiApiService = WikiApiFactory.apiService
     private val mapper = Mapper()
-    private val _articlePreviewList = MutableLiveData<MutableList<ArticlePreviewItem>>()
-    val articlePreviewList: LiveData<List<ArticlePreviewItem>>
+    private val _articlePreviewList = MutableLiveData<MutableList<Article>>()
+    val articlePreviewList: LiveData<List<Article>>
         get() {
             return _articlePreviewList.map {
                 it.toList()
             }
         }
 
-    override suspend fun getArticleById(id: Int): ArticlePreviewItem {
-        val res = wikiApiService.getArticleById(pageIds = id)
-            .queryPages
-            .pageMap[id] ?: throw RuntimeException("Article item is null")
-        return mapper.mapArticlePreviewDtoToArticlePreview(res)
+    override suspend fun getArticleById(id: Int): Article {
+        val res = wikiApiService.getArticleHTMLById(pageId = id).parse
+        return mapper.mapArticleHTMLDtoToArticlePreview(res)
     }
 
     override suspend fun loadRandomResponse() {
@@ -34,7 +32,7 @@ class ArticleRepositoryImpl() : Repository {
         val newList = _articlePreviewList.value ?: mutableListOf()
         val prevSize = articlePreviewList.value?.size ?: 0
 
-        while (newList.size <= prevSize + 6) {
+        while (newList.size <= prevSize + NEW_PAGES_MIN) {
             try {
                 val loadedArticles =
                     wikiApiService.getRandomResponse()
@@ -56,20 +54,20 @@ class ArticleRepositoryImpl() : Repository {
 
     }
 
-    private fun validateArticles(articles: List<ArticlePreviewItem>) =
+    private fun validateArticles(articles: List<Article>) =
         articles.filter { articleItem ->
             articleItem.imageTitle != null && articleItem.imageTitle.any {
                 it.title.contains("jpg")
             }
         }
 
-    private suspend fun bindImageUrl(articles: List<ArticlePreviewItem>) {
+    private suspend fun bindImageUrl(articles: List<Article>) {
 
         articles.forEach { articleItem ->
             articleItem.imageTitle?.let {
                 try {
                     val imageTitle = it.first {
-                        it.title.contains("jpg")
+                        it.title.contains("jpg") || it.title.contains("png") || it.title.contains("jpeg")
                     }
 
                     val artImage =
@@ -80,12 +78,16 @@ class ArticleRepositoryImpl() : Repository {
                     articleItem.imageUrl = artImage.url
 
                 } catch (e: Exception) {
-                    Log.d("MainActivity", "HERE ${e.message}")
+                    Log.d("MainActivity", "Bind image error. Article id: ${articleItem.id}: ${e.message}")
                 }
 
             }
 
         }
+    }
+
+    companion object {
+        private const val NEW_PAGES_MIN = 8
     }
 
 }

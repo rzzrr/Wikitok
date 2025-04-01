@@ -39,8 +39,8 @@ interface WikiApiService {
     suspend fun getArticleHTMLById(
         @Query(QUERY_PARAM_ACTION) action: String = "parse",
         @Query(QUERY_PARAM_PAGE_ID) pageId: Int,
-        @Query(QUERY_PARAM_PROP) prop: String = "text",
-        @Query(QUERY_PARAM_SECTION) section: Int = 0,
+        @Query(QUERY_PARAM_PROP) prop: String = "text|sections|displaytitle",
+        @Query(QUERY_PARAM_MOBILE_FORMAT) mobileFormat: String = "yes",
         @Query(QUERY_PARAM_FORMAT) format: String = "json"
     ): ArticleHtmlResponse
 
@@ -69,6 +69,7 @@ interface WikiApiService {
         private const val QUERY_PARAM_TITLES = "titles"
         private const val QUERY_PARAM_II_PROP = "iiprop"
         private const val QUERY_PARAM_IM_LIMIT = "imlimit"
+        private const val QUERY_PARAM_MOBILE_FORMAT = "mobileformat"
         private const val MAX_IM_LIMIT_VALUE = 500
 
 

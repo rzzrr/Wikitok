@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.rzatha.wikitok.R
 import com.rzatha.wikitok.databinding.ArticlePreviewItemBinding
-import com.rzatha.wikitok.domain.ArticlePreviewItem
+import com.rzatha.wikitok.domain.Article
 
 class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
 
     var onReachEndListener: OnReachEndListener? = null
     var onItemClickListener: OnItemClickListener? = null
 
-    var articleList: List<ArticlePreviewItem> = listOf()
+    var articleList: List<Article> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -41,7 +41,7 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
                             "Article id: ${article.id}")
                     Glide.with(holder.itemView)
                         .load(article.imageUrl)
-                        .placeholder(R.drawable.ic_heart_filled)
+                        .placeholder(R.drawable.image_placeholder)
                         .into(ivArticle)
                 } else {
                     ivArticle.setImageResource(R.drawable.ggb)
@@ -50,7 +50,7 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
                 tvTitle.text = title
                 tvArticleText.text = extractText
 
-                if (position >= articleList.size - 2) {
+                if (position >= articleList.size - REM_PAGES_TO_START_LOAD) {
                     onReachEndListener?.onReachEnd()
                 }
 
@@ -81,5 +81,9 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
 
     interface OnItemClickListener {
         fun onItemClick(articleId: Int)
+    }
+
+    companion object {
+        const val REM_PAGES_TO_START_LOAD = 5
     }
 }
