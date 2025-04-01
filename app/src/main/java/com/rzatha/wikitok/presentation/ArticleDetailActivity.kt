@@ -29,7 +29,7 @@ class ArticleDetailActivity : AppCompatActivity() {
 
             viewModel = ViewModelProvider(
                 this,
-                ArticleDetailViewModelFactory(it)
+                ArticleDetailViewModelFactory(it, application)
             )[ArticleDetailViewModel::class.java]
 
 

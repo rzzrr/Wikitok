@@ -1,5 +1,6 @@
 package com.rzatha.wikitok.data
 
+import com.rzatha.wikitok.data.database.ArticleDbModel
 import com.rzatha.wikitok.data.network.htmlResponse.ArticleHTMLDto
 import com.rzatha.wikitok.domain.Article
 
@@ -22,6 +23,14 @@ class Mapper {
             extractText = dto.text.value,
             imageTitle = null,
             imageUrl =null
+        )
+    }
+
+    fun mapArticleToArticleDbModel(article: Article): ArticleDbModel {
+        return ArticleDbModel(
+            id = article.id,
+            title = article.title,
+            imageUrl = article.imageUrl
         )
     }
 }
