@@ -1,6 +1,5 @@
 package com.rzatha.wikitok.presentation
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -8,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSnapHelper
 import com.rzatha.wikitok.databinding.ActivityMainBinding
+import com.rzatha.wikitok.domain.Article
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,32 +15,35 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val articleAdapter = ArticleAdapter()
     private val snapHelper = LinearSnapHelper()
     private lateinit var viewModel: MainViewModel
+    private val articleAdapter = ArticleAdapter()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
 
-        setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+        setContentView(binding.root)
+        setupRecyclerView()
         observeViewModel()
-
-
     }
 
     private fun observeViewModel() {
-        viewModel.articlePreviewItemList.observe(this){
+        viewModel.articleItemList.observe(this){
             Log.d(TAG, "observeViewModel")
             articleAdapter.articleList = it
         }
         viewModel.isLoading.observe(this){loading ->
             if(loading) {
-                Toast.makeText(this,"New data loading", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"New data loading", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this,"New data loaded", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"New data loaded", Toast.LENGTH_SHORT).show()
             }
+        }
+        viewModel.favouriteArticleIdList.observe(this){
+            articleAdapter.favouriteArticlesId = it
         }
     }
 
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         articleAdapter.onReachEndListener = object : ArticleAdapter.OnReachEndListener{
             override fun onReachEnd() {
                 Log.d(TAG, "onReachEnd")
-                viewModel. loadRandomResponse()
+                viewModel.loadRandomResponse()
             }
         }
         articleAdapter.onItemClickListener = object : ArticleAdapter.OnItemClickListener{
@@ -60,7 +63,15 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClick(articleId: Int) {
                 startActivity(ArticleDetailActivity.newIntent(this@MainActivity, articleId))
             }
-
+        }
+        articleAdapter.onFavouriteClickAdapter = object : ArticleAdapter.OnFavouriteClickAdapter{
+            override fun onFavouriteClick(containsInDb: Boolean, article: Article) {
+                if (containsInDb) {
+                    viewModel.removeFromDb(article)
+                } else {
+                    viewModel.addToDb(article)
+                }
+            }
         }
     }
 

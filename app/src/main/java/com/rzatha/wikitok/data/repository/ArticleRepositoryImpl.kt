@@ -1,19 +1,24 @@
 package com.rzatha.wikitok.data.repository
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.rzatha.wikitok.data.Mapper
+import com.rzatha.wikitok.data.database.AppDatabase
 import com.rzatha.wikitok.data.network.WikiApiFactory
 import com.rzatha.wikitok.domain.Article
 import com.rzatha.wikitok.domain.Repository
 
-class ArticleRepositoryImpl() : Repository {
+class ArticleRepositoryImpl(
+    application: Application
+) : Repository {
 
     private val wikiApiService = WikiApiFactory.apiService
     private val mapper = Mapper()
     private val _articlePreviewList = MutableLiveData<MutableList<Article>>()
+    private val articleDao = AppDatabase.getInstance(application).articleDao()
     val articlePreviewList: LiveData<List<Article>>
         get() {
             return _articlePreviewList.map {
@@ -21,9 +26,20 @@ class ArticleRepositoryImpl() : Repository {
             }
         }
 
+    val favouriteArticleIdList = articleDao.getAllArticlesId()
+
     override suspend fun getArticleById(id: Int): Article {
         val res = wikiApiService.getArticleHTMLById(pageId = id).parse
         return mapper.mapArticleHTMLDtoToArticlePreview(res)
+    }
+
+    override suspend fun addArticleToDb(article: Article) {
+        articleDao.insertArticle(mapper.mapArticleToArticleDbModel(article))
+    }
+
+    override suspend fun removeArticleFromDb(article: Article) {
+        Log.d("MainActivity", "Remove ${article.id}")
+        articleDao.deleteArticle(article.id)
     }
 
     override suspend fun loadRandomResponse() {
@@ -50,8 +66,8 @@ class ArticleRepositoryImpl() : Repository {
         }
 
         bindImageUrl(newList.toList())
-        _articlePreviewList.postValue(newList)
 
+        _articlePreviewList.postValue(newList)
     }
 
     private fun validateArticles(articles: List<Article>) =
@@ -85,6 +101,7 @@ class ArticleRepositoryImpl() : Repository {
 
         }
     }
+
 
     companion object {
         private const val NEW_PAGES_MIN = 8
