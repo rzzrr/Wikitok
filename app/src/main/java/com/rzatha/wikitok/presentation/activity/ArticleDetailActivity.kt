@@ -23,13 +23,10 @@ class ArticleDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         intent.extras?.getInt(EXTRA_ARTICLE_ID)?.let {
-
             viewModel = ViewModelProvider(
                 this,
                 ArticleDetailViewModelFactory(it, application)
             )[ArticleDetailViewModel::class.java]
-
-
         } ?: throw RuntimeException("The required argument ArticleId was not passed ")
 
         viewModel.ldArticle.observe(this){
