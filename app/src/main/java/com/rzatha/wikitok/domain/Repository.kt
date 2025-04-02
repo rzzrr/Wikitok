@@ -11,4 +11,6 @@ interface Repository {
     suspend fun addArticleToDb(article: Article)
     suspend fun removeArticleFromDb(article: Article)
 
+    fun getFavouriteArticleListFromDb() : LiveData<List<Article>>
+
 }

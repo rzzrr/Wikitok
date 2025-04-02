@@ -33,15 +33,6 @@ class ArticleRepositoryImpl(
         return mapper.mapArticleHTMLDtoToArticlePreview(res)
     }
 
-    override suspend fun addArticleToDb(article: Article) {
-        articleDao.insertArticle(mapper.mapArticleToArticleDbModel(article))
-    }
-
-    override suspend fun removeArticleFromDb(article: Article) {
-        Log.d("MainActivity", "Remove ${article.id}")
-        articleDao.deleteArticle(article.id)
-    }
-
     override suspend fun loadRandomResponse() {
         Log.d("MainActivity", "loadRandomResponse")
 
@@ -102,6 +93,19 @@ class ArticleRepositoryImpl(
         }
     }
 
+    override suspend fun addArticleToDb(article: Article) {
+        articleDao.insertArticle(mapper.mapArticleToArticleDbModel(article))
+    }
+
+    override suspend fun removeArticleFromDb(article: Article) {
+        articleDao.deleteArticle(article.id)
+    }
+
+    override fun getFavouriteArticleListFromDb(): LiveData<List<Article>> {
+        return articleDao.getAllArticles().map {
+            mapper.mapArticleDbModelListToArticleList(it)
+        }
+    }
 
     companion object {
         private const val NEW_PAGES_MIN = 8

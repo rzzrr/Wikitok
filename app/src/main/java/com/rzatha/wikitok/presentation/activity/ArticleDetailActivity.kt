@@ -1,17 +1,14 @@
-package com.rzatha.wikitok.presentation
+package com.rzatha.wikitok.presentation.activity
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.rzatha.wikitok.R
 import com.rzatha.wikitok.databinding.ActivityArticleDetailBinding
+import com.rzatha.wikitok.presentation.viewmodel.ArticleDetailViewModel
+import com.rzatha.wikitok.presentation.viewmodel.ArticleDetailViewModelFactory
+import com.rzatha.wikitok.presentation.WikiWebViewClient
 
 class ArticleDetailActivity : AppCompatActivity() {
 

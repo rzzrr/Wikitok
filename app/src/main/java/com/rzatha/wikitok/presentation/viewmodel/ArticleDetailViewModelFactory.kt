@@ -1,10 +1,9 @@
-package com.rzatha.wikitok.presentation
+package com.rzatha.wikitok.presentation.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import java.lang.Appendable
 
 class ArticleDetailViewModelFactory(
     val articleId: Int,

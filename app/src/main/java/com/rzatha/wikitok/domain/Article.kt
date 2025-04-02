@@ -5,7 +5,7 @@ import com.rzatha.wikitok.data.PreviewArticleImageTitle
 data class Article(
     val id: Int,
     val title: String,
-    val extractText: String?,
-    val imageTitle: List<PreviewArticleImageTitle>?,
-    var imageUrl : String?
+    val extractText: String? = null,
+    val imageTitle: List<PreviewArticleImageTitle>? = null,
+    var imageUrl : String?  = null
 )

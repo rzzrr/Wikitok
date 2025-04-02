@@ -1,4 +1,4 @@
-package com.rzatha.wikitok.presentation
+package com.rzatha.wikitok.presentation.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

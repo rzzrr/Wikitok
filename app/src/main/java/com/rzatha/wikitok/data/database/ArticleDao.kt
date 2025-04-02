@@ -20,4 +20,5 @@ interface ArticleDao {
 
     @Query("delete from articles where id = :id")
     suspend fun deleteArticle(id: Int)
+
 }

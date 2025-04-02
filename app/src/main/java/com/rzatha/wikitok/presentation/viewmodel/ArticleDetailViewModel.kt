@@ -1,12 +1,10 @@
-package com.rzatha.wikitok.presentation
+package com.rzatha.wikitok.presentation.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.resourceinspection.annotation.Attribute.IntMap
 import com.rzatha.wikitok.data.repository.ArticleRepositoryImpl
 import com.rzatha.wikitok.domain.Article
 import com.rzatha.wikitok.domain.GetArticleById

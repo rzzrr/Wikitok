@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Wikitok</string>
     <string name="es">Guadeloupe has a population of 375,693 (2021).\n\n\n== Population ==\nAccording to INSEE Guadeloupe had an estimated population of 403,977 on 1 January 2012. Life expectancy at birth is 77.0 years for males, and 83.5 for females (figures for 2011).\n\n\n=== Structure of the population ===\n\n\n== Vital statistics ==\nThe following vital statistics include Saint Martin and Saint Barth\u00e9lemy.\n\nExcluding data for Saint Barth\u00e9lemy and Saint Martin\n\n\n== Languages ==\nFrench is the official language, taught in the school system. Antillean Creole French is spoken by a large part of the population, understood by nearly all, and taught in some schools. A 2007 document issued by the Organisation internationale de la Francophonie estimated the population to be 80.2% \"francophone\" and 14.9% \"partially francophone\".\n\n\n== Religion ==\nFigures in 2020 state that 96% of the population is Christian (of these, approximately 86% are Roman Catholic, 8% Protestant and 6% other Christian); of the other 4%, most have no religion, although there is a small number of Hindus, Bah\u00e1\u02bc\u00eds and Muslims.\n\n\n== See also ==\nDemographics of France\n\n\n== References =="</string>
+    <string name="menu">Меню</string>
+    <string name="favourites">Избранное</string>
+    <string name="back">Назад</string>
 </resources>
