@@ -9,6 +9,7 @@ class Mapper {
     fun mapArticlePreviewDtoToArticlePreview(dto: ArticlePreviewDto) = Article(
         id = dto.id,
         title = dto.title,
+        fullUrl = dto.fullUrl,
         extractText = dto.extractText,
         imageTitle = dto.images,
         imageUrl = dto.imageUrl

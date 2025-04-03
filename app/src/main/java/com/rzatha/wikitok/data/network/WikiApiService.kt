@@ -14,7 +14,8 @@ interface WikiApiService {
     suspend fun getRandomResponse(
         @Query(QUERY_PARAM_ACTION) action: String = "query",
         @Query(QUERY_PARAM_FORMAT) format: String = "json",
-        @Query(QUERY_PARAM_PROP) prop: String = "extracts|images",
+        @Query(QUERY_PARAM_PROP) prop: String = "extracts|images|info",
+        @Query(QUERY_PARAM_IN_PROP) inprop: String = "url",
         @Query(QUERY_PARAM_GENERATOR) generator: String = "random",
         @Query(QUERY_PARAM_FORMAT_VERSION) formatVersion: Int = 2,
         @Query(QUERY_PARAM_FORMAT_EX_INTRO) exIntro: Int = 1,

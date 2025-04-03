@@ -1,11 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Wikitok" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Цвет статусной строки -->
         <item name="android:statusBarColor">@color/cardview_dark_background</item>
-        <!-- Цвет навигационной панели -->
         <item name="android:navigationBarColor">@color/cardview_dark_background</item>
-        <!-- Светлые иконки в статусной строке (для темного фона) -->
         <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

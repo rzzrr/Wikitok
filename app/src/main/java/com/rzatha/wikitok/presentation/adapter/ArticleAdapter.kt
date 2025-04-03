@@ -19,6 +19,7 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(
     var onReachEndListener: OnReachEndListener? = null
     var onItemClickListener: OnItemClickListener? = null
     var onFavouriteClickAdapter: OnFavouriteClickAdapter? = null
+    var onShareListener: OnShareListener? = null
 
     private var _favouriteArticlesId: List<Int> = listOf()
     var favouriteArticlesId: List<Int>
@@ -42,10 +43,11 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(
                 }
             }
         }
+
+
     private fun findChangedFavoriteIds(oldList: List<Int>, newList: List<Int>): Set<Int> {
         val oldSet = oldList.toSet()
         val newSet = newList.toSet()
-
         return (oldSet union newSet) - (oldSet intersect newSet)
     }
 
@@ -73,8 +75,6 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(
                     .load(article.imageUrl)
                     .placeholder(R.drawable.image_placeholder)
                     .into(ivArticle)
-            } else {
-                ivArticle.setImageResource(R.drawable.ggb)
             }
             tvTitle.text = article.title
             tvArticleText.text = article.extractText
@@ -94,6 +94,10 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(
         with(holder.binding) {
             root.setOnClickListener {
                 onItemClickListener?.onItemClick(article.id)
+            }
+            root.setOnLongClickListener{
+                onShareListener?.onShare(article)
+                true
             }
             ivFavourites.setOnClickListener {
                 val artContainsInDb = _favouriteArticlesId.contains(article.id)
@@ -146,6 +150,10 @@ class ArticleAdapter : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(
 
     interface OnItemClickListener {
         fun onItemClick(articleId: Int)
+    }
+
+    interface OnShareListener {
+        fun onShare(article: Article)
     }
 
     interface OnFavouriteClickAdapter {

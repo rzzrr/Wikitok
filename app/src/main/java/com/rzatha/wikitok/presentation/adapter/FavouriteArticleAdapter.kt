@@ -1,6 +1,5 @@
 package com.rzatha.wikitok.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -40,7 +39,7 @@ class FavouriteArticleAdapter : ListAdapter<Article, FavouriteArticleAdapter.Art
                         .into(ivArticleImage)
 
                 } else {
-                    ivArticleImage.setImageResource(R.drawable.ggb)
+                    ivArticleImage.setImageResource(R.drawable.golden_gate_bridge)
                 }
 
                 tvTitle.text = title
