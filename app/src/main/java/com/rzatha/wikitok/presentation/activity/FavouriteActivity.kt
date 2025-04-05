@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.rzatha.wikitok.databinding.ActivityFavouriteBinding
 import com.rzatha.wikitok.domain.Article
 import com.rzatha.wikitok.presentation.adapter.FavouriteArticleAdapter

@@ -9,7 +9,9 @@ import com.rzatha.wikitok.data.repository.ArticleRepositoryImpl
 import com.rzatha.wikitok.domain.Article
 import com.rzatha.wikitok.domain.GetArticleListFromDb
 import com.rzatha.wikitok.domain.RemoveArticleFromDb
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FavouriteViewModel(
     application: Application
@@ -34,10 +36,14 @@ class FavouriteViewModel(
         if (substring.isEmpty()) {
             _filteredList.value = currentList
         } else {
-            val filtered = currentList.filter {
-                it.title.contains(substring, ignoreCase = true)
+            viewModelScope.launch {
+                val filtered = currentList.filter {
+                    it.title.contains(substring, ignoreCase = true)
+                }
+                withContext(Dispatchers.Main){
+                    _filteredList.value = filtered
+                }
             }
-            _filteredList.value = filtered
         }
     }
 
