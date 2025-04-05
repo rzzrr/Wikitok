@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.rzatha.wikitok.databinding.ActivityFavouriteBinding
@@ -23,13 +24,38 @@ class FavouriteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        setupViewModel()
+        setupAdapter()
+        setupFilter()
+    }
 
-        binding.rvFavourites.adapter = favouriteAdapter
+    private fun setupFilter() {
+        binding.svFilter.setOnQueryTextListener(
+            object : OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean = false
 
-        viewModel = ViewModelProvider(this).get(FavouriteViewModel::class.java)
+                override fun onQueryTextChange(title: String?): Boolean {
+                    viewModel.filter(title.orEmpty())
+                    return true
+                }
+            }
+        )
+    }
+
+    private fun setupViewModel(){
+        viewModel = ViewModelProvider(this)[FavouriteViewModel::class.java]
+
         viewModel.getArticleListFromDb.observe(this) {
+            viewModel.setOriginalList(it)
+        }
+
+        viewModel.filteredList.observe(this){
             favouriteAdapter.submitList(it)
         }
+    }
+
+    private fun setupAdapter(){
+        binding.rvFavourites.adapter = favouriteAdapter
 
         favouriteAdapter.onItemClickListener =
             object : FavouriteArticleAdapter.OnItemClickListener {
@@ -46,7 +72,6 @@ class FavouriteActivity : AppCompatActivity() {
                     viewModel.removeArticle(article)
                 }
             }
-
 
     }
 
