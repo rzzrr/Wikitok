@@ -29,6 +29,7 @@ class ArticleDetailActivity : AppCompatActivity() {
             )[ArticleDetailViewModel::class.java]
         } ?: throw RuntimeException("The required argument ArticleId was not passed ")
 
+
         viewModel.ldArticle.observe(this){
             binding.webView.loadDataWithBaseURL(
                 "https://ru.wikipedia.org/",

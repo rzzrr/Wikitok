@@ -1,8 +1,14 @@
 package com.rzatha.wikitok.presentation.activity
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.widget.Toast
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.lifecycle.ViewModelProvider
@@ -30,7 +36,7 @@ class FavouriteActivity : AppCompatActivity() {
 
     private fun setupFilter() {
         binding.svFilter.setOnQueryTextListener(
-            object : OnQueryTextListener{
+            object : OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean = false
 
                 override fun onQueryTextChange(title: String?): Boolean {
@@ -41,27 +47,34 @@ class FavouriteActivity : AppCompatActivity() {
         )
     }
 
-    private fun setupViewModel(){
+    private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[FavouriteViewModel::class.java]
 
         viewModel.getArticleListFromDb.observe(this) {
             viewModel.setOriginalList(it)
         }
 
-        viewModel.filteredList.observe(this){
+        viewModel.filteredList.observe(this) {
             favouriteAdapter.submitList(it)
         }
     }
 
-    private fun setupAdapter(){
+    private fun setupAdapter() {
         binding.rvFavourites.adapter = favouriteAdapter
 
         favouriteAdapter.onItemClickListener =
             object : FavouriteArticleAdapter.OnItemClickListener {
                 override fun onItemClick(article: Article) {
-                    startActivity(
-                        ArticleDetailActivity.newIntent(this@FavouriteActivity, article.id)
-                    )
+                    if (isNetworkAvailable()) {
+                        startActivity(
+                            ArticleDetailActivity.newIntent(this@FavouriteActivity, article.id)
+                        )
+                    } else {
+                        Toast.makeText(
+                            this@FavouriteActivity,
+                            "There is no internet connection",
+                            Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -78,6 +91,14 @@ class FavouriteActivity : AppCompatActivity() {
         fun newIntent(context: Context): Intent {
             return Intent(context, FavouriteActivity::class.java)
         }
+    }
+
+    private fun Context.isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(
+            connectivityManager.activeNetwork
+        )
+        return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
     }
 
 }
